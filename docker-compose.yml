@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+
+  dynamodb:
+    container_name: fpg-dynamodb
+    image: amazon/dynamodb-local:latest
+    command: [ "-jar", "DynamoDBLocal.jar", "-inMemory", "-sharedDb" ]
+    ports:
+      - "8000:8000"
+    environment:
+      JAVA_OPTS: '-Xmx256m'
+    networks:
+      - default
+
+  postgres:
+    image: postgres
+    volumes:
+      - /var/run/postgresql:/var/run/postgresql
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  redis:
+    container_name: fpg-redis
+    image: redis:6.2.3
+    ports:
+      - "6379:6379"
+    networks:
+      - default
